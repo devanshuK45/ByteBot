@@ -31,16 +31,13 @@ export default {
       try {
         InteractionHelper.patchInteractionResponses(interaction);
 
-        if (interaction.isChatInputCommand()) {
-          try {
-            logger.info(`Command executed: /${interaction.commandName} by ${interaction.user.tag}`, {
-              event: 'interaction.command.received',
-              traceId: interactionTraceContext.traceId,
-              guildId: interaction.guildId,
-              userId: interaction.user?.id,
-              command: interaction.commandName
-            });
+       if (interaction.isChatInputCommand()) {
+  try {
 
+    // Make all slash command replies private
+    await interaction.deferReply({
+      flags: MessageFlags.Ephemeral
+    });
             validateChatInputPayloadOrThrow(interaction, withTraceContext({
               type: 'command_input_validation',
               commandName: interaction.commandName
